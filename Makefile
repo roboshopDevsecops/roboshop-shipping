@@ -2,7 +2,7 @@ docker-build:
 	git pull
 	aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 349558942960.dkr.ecr.us-east-1.amazonaws.com
 	docker build -t 349558942960.dkr.ecr.us-east-1.amazonaws.com/roboshop-shipping:$(image_tag) .
-	trivy image 349558942960.dkr.ecr.us-east-1.amazonaws.com/roboshop-shipping:$(image_tag) -s CRITICAL,HIGH --ignore-unfixed
+	TMPDIR=$${TMPDIR:-/home/ec2-user/tmp} TRIVY_CACHE_DIR=$${TRIVY_CACHE_DIR:-/home/ec2-user/.cache/trivy} trivy image 349558942960.dkr.ecr.us-east-1.amazonaws.com/roboshop-shipping:$(image_tag) -s CRITICAL,HIGH --ignore-unfixed
 	docker push 349558942960.dkr.ecr.us-east-1.amazonaws.com/roboshop-shipping:$(image_tag)
 
 docker-build-db:
